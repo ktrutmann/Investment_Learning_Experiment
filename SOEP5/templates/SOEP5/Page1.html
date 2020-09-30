@@ -1,0 +1,30 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+     Wie schätzen Sie sich persönlich ein:
+    {%  formfields %}
+    0 = Gar nicht risikobereit &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10 = Sehr risikobereit
+    <br /> <br />
+    {% next_button %}
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+            setTimeout(
+        function()
+    {
+        alert("Zeitlimit erreicht. Bitte entscheiden Sie sich schneller.");
+    },
+    30 * 1000
+    );
+    </script>
+
+{% endblock %}
+

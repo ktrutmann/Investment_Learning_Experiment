@@ -1,0 +1,18 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    Fragebogen zur Risikobereitschaft
+{% endblock %}
+
+{% block content %}
+    Es folgen nun noch einige Fragen zu Ihrer Risikobereitschaft.<br /> <br />
+
+    Antworten Sie bitte anhand der folgenden Skala: <br />
+    Der Wert <b>0</b> bedeutet: <b>gar nicht risikobereit</b> <br />
+    Der Wert <b>10</b> bedeutet: <b>sehr risikobereit</b> <br /> <br />
+    Mit den Werten dazwischen können Sie Ihre Einschätzung abstufen. <br /><br />
+
+    {% next_button %}
+
+{% endblock %}
