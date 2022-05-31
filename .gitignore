@@ -2,3 +2,7 @@
 /.idea/
 /venv/
 *.pyc
+*.sqlite3
+/venv_windows/
+/__temp_migrations/
+**/__pycache__/
