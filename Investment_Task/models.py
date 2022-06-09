@@ -16,7 +16,7 @@ class Constants(BaseConstants):
     name_in_url = 'Investment_Task'
     players_per_group = None
     # Needs to include a 'main_condition':
-    condition_sequence = ['baseline', 'baseline', 'main_condition', 'main_condition']
+    condition_sequence = ['baseline', 'baseline']
     lottery_prob = 1  # What proportions of the periods has a lottery attached?
     lottery_bonus = 10  # How many points can be won in the belief elicitation task?
     lottery_discount = .1  # How many "investment points are the lottery points worth?
@@ -76,6 +76,9 @@ class Player(BasePlayer):
     main_condition = models.StringField()
     i_round_in_block = models.IntegerField()
     i_block = models.IntegerField()
+
+    # For bot testing:
+    alpha_shift = models.FloatField()
 
     # Validated in R
     def make_price_paths(self, save_path=True, conditions=tuple('training')):

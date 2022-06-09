@@ -14,7 +14,6 @@ class PlayerBot(Bot):
     softmax_sens = 1  # Sensitivity on the softmax function.
     # Extremely sensitive means it's a step function at a 50:50 belief
     risk_aversion_param = .88  # The amount of risk aversion in the expected utility model y = x^param
-    alpha_shift = [rd.normalvariate(0, .02) for _ in range(1000)]
     cur_up_belief = 50
 
     def get_model_trade(self):
@@ -50,7 +49,7 @@ class PlayerBot(Bot):
         is_interaction = self.player.hold == prev_self.hold and\
             ((prev_returns > 0 and fav_move) or (prev_returns < 0 and not fav_move))
         new_belief = belief +\
-            ((self.base_alpha + self.alpha_shift[self.player.id_in_group]) - is_interaction * self.alpha_effect) *\
+            ((self.base_alpha + self.player.alpha_shift) - is_interaction * self.alpha_effect) *\
             (int(price_up) - belief)
 
         # Also adding some noise so we don't over-fit the model later

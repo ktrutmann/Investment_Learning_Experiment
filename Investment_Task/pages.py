@@ -1,5 +1,6 @@
 from ._builtin import Page, WaitPage
 from .models import Constants
+import random as rd
 
 
 class initializer_page(Page):
@@ -23,11 +24,19 @@ class initializer_page(Page):
             self.player.participant.vars['skipper'] = False  # To skip the last round of a block (for the price path)
 
             self.player.calculate_bayesian_prob()
+
+            # For bot testing:
+            self.player.participant.vars['alpha_shift'] = rd.normalvariate(0, 0.02)
+
         else:
             self.player.advance_round()
 
         if self.player.participant.vars['i_in_block'] == 0:
             self.player.initialize_portfolio()
+
+        # For bot testing:
+        if self.player.participant._is_bot:
+            self.player.alpha_shift = self.player.participant.vars['alpha_shift'] 
 
 
 class condition_page(Page):
