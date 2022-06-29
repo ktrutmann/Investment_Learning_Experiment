@@ -26,7 +26,7 @@ class initializer_page(Page):
             self.player.calculate_bayesian_prob()
 
             # For bot testing:
-            self.player.participant.vars['alpha_shift'] = rd.normalvariate(0, 0.02)
+            self.player.participant.vars['alpha_shift'] = rd.normalvariate(0, 0.01)
 
         else:
             self.player.advance_round()
@@ -84,6 +84,16 @@ class belief_page(Page):
 
     def before_next_page(self):
         self.player.calculate_belief_bonus()
+
+        # For bot testing and debugging purposes:
+        if self.player.participant._is_bot and self.round_number > 1:
+            prev_self = self.player.in_round(self.round_number - 1)
+
+            price_up = self.player.price > prev_self.price
+            fav_move = (self.player.hold == 1 and price_up) or (self.player.hold == - 1 and not price_up)
+            is_interaction = self.player.hold == prev_self.hold and\
+                ((prev_self.returns > 0 and fav_move) or (prev_self.returns < 0 and not fav_move))
+            self.player.alpha_used = ((.2 + self.player.alpha_shift) - is_interaction * .08)
 
 
 class update_page(Page):
