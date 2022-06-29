@@ -53,7 +53,7 @@ class PlayerBot(Bot):
             (int(price_up) - belief)
 
         # Also adding some noise so we don't over-fit the model later
-        eta = rd.normalvariate(0, .02)
+        eta = rd.normalvariate(0, .01)
         new_belief = round((new_belief + eta) * 100)
         return min(max(new_belief, 0), 100)
 
