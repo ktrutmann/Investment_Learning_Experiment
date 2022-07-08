@@ -10,7 +10,8 @@ class PlayerBot(Bot):
 
     cases = ['model']  # Either 'model' or 'random'
     base_alpha = .2  # What is the learning rat in a "normal" situation
-    alpha_effect = .08  # How much lower is the learning rate for the affected situations?
+    alpha_effect = .0  # How much lower is the learning rate for the affected situations?
+    sigma = .05 # The reporting error for the model
     softmax_sens = 1  # Sensitivity on the softmax function.
     # Extremely sensitive means it's a step function at a 50:50 belief
     risk_aversion_param = .88  # The amount of risk aversion in the expected utility model y = x^param
@@ -52,10 +53,7 @@ class PlayerBot(Bot):
             ((self.base_alpha + self.player.alpha_shift) - is_interaction * self.alpha_effect) *\
             (int(price_up) - belief)
 
-        # Also adding some noise so we don't over-fit the model later
-        eta = rd.normalvariate(0, .01)
-        new_belief = round((new_belief + eta) * 100)
-        return min(max(new_belief, 0), 100)
+        return round(new_belief * 100)
 
     def play_round(self):
         yield Submission(pages.initializer_page, check_html=False)
@@ -79,7 +77,7 @@ class PlayerBot(Bot):
         # Belief page
         if self.player.participant.vars['belief_elicitation'] and not self.player.participant.vars['skipper']:
             if self.case == 'model':
-                this_belief = self.cur_up_belief
+                this_belief = min(max(self.cur_up_belief + round(rd.normalvariate(0, self.sigma) * 100), 0), 100)
             else:
                 this_belief = rd.randint(0, 100)
 

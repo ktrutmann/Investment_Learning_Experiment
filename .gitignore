@@ -6,3 +6,4 @@
 /venv_windows/
 /__temp_migrations/
 **/__pycache__/
+/bot_data*/
