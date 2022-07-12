@@ -26,7 +26,7 @@ class initializer_page(Page):
             self.player.calculate_bayesian_prob()
 
             # For bot testing:
-            self.player.participant.vars['alpha_shift'] = rd.normalvariate(0, 0.05)
+            self.player.participant.vars['alpha_shift'] = rd.normalvariate(0, .05)
 
         else:
             self.player.advance_round()

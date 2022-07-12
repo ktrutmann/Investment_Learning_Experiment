@@ -11,7 +11,7 @@ class PlayerBot(Bot):
     cases = ['model']  # Either 'model' or 'random'
     base_alpha = .2  # What is the learning rat in a "normal" situation
     alpha_effect = .05  # How much lower is the learning rate for the affected situations?
-    sigma = .02 # The reporting error for the model
+    sigma = .05 # The reporting error for the model
     softmax_sens = 1  # Sensitivity on the softmax function.
     # Extremely sensitive means it's a step function at a 50:50 belief
     risk_aversion_param = .88  # The amount of risk aversion in the expected utility model y = x^param
