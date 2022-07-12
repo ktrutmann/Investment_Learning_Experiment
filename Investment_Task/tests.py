@@ -10,19 +10,21 @@ class PlayerBot(Bot):
 
     cases = ['model']  # Either 'model' or 'random'
     base_alpha = .2  # What is the learning rat in a "normal" situation
-    alpha_effect = .0  # How much lower is the learning rate for the affected situations?
-    sigma = .05 # The reporting error for the model
+    alpha_effect = .05  # How much lower is the learning rate for the affected situations?
+    sigma = .02 # The reporting error for the model
     softmax_sens = 1  # Sensitivity on the softmax function.
     # Extremely sensitive means it's a step function at a 50:50 belief
     risk_aversion_param = .88  # The amount of risk aversion in the expected utility model y = x^param
     cur_up_belief = 50
+    belief_without_noise = 999
+
 
     def get_model_trade(self):
         current_portfolio = self.player.cash + self.player.hold * self.player.price
         win_utils = [(current_portfolio + i) ** self.risk_aversion_param for i in Constants.updates]
         lose_utils = [(current_portfolio - i) ** self.risk_aversion_param for i in Constants.updates]
 
-        up_belief = self.cur_up_belief / 100
+        up_belief = self.belief_without_noise
 
         investing_utility = up_belief * sum(win_utils) / len(Constants.updates) +\
             (1 - up_belief) * sum(lose_utils) / len(Constants.updates)
@@ -38,10 +40,11 @@ class PlayerBot(Bot):
 
     def get_model_belief(self):
         if self.player.participant.vars['i_in_block'] == 0:
-            return 50
+            self.belief_without_noise = .5
+            return min(max(round(50 + rd.normalvariate(0, self.sigma) * 100), 0), 100)
 
         prev_self = self.player.in_round(self.round_number - 1)
-        belief = prev_self.belief / 100
+        belief = prev_self.belief_without_noise
         prev_returns = prev_self.returns
 
         price_up = self.player.price > prev_self.price
@@ -53,7 +56,8 @@ class PlayerBot(Bot):
             ((self.base_alpha + self.player.alpha_shift) - is_interaction * self.alpha_effect) *\
             (int(price_up) - belief)
 
-        return round(new_belief * 100)
+        self.belief_without_noise = new_belief
+        return min(max(round((new_belief + rd.normalvariate(0, self.sigma)) * 100), 0), 100)
 
     def play_round(self):
         yield Submission(pages.initializer_page, check_html=False)
@@ -64,6 +68,7 @@ class PlayerBot(Bot):
         # trading page
         if not self.player.participant.vars['skipper']:
             if self.case == 'model':
+                # Note: The transactions are based on the noiseless beliefs
                 self.cur_up_belief = self.get_model_belief()
                 transaction = self.get_model_trade()
             else:
@@ -77,7 +82,7 @@ class PlayerBot(Bot):
         # Belief page
         if self.player.participant.vars['belief_elicitation'] and not self.player.participant.vars['skipper']:
             if self.case == 'model':
-                this_belief = min(max(self.cur_up_belief + round(rd.normalvariate(0, self.sigma) * 100), 0), 100)
+                this_belief = self.cur_up_belief
             else:
                 this_belief = rd.randint(0, 100)
 

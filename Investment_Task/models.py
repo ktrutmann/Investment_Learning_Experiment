@@ -80,6 +80,7 @@ class Player(BasePlayer):
     # For bot testing:
     alpha_shift = models.FloatField()
     alpha_used = models.FloatField() # For debugging purposes
+    belief_without_noise = models.FloatField()
 
     # Validated in R
     def make_price_paths(self, save_path=True, conditions=tuple('training')):
