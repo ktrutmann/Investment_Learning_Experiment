@@ -87,7 +87,7 @@ class belief_page(Page):
         self.player.calculate_belief_bonus()
 
         # For bot testing and debugging purposes:
-        if self.player.participant._is_bot and self.round_number > 1:
+        if self.player.participant._is_bot and self.player.participant.vars['i_in_block'] > 0:
             prev_self = self.player.in_round(self.round_number - 1)
 
             price_up = self.player.price > prev_self.price
