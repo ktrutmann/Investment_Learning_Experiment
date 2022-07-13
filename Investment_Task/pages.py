@@ -26,7 +26,7 @@ class initializer_page(Page):
             self.player.calculate_bayesian_prob()
 
             # For bot testing:
-            self.player.participant.vars['alpha_shift'] = rd.normalvariate(0, .05)
+            self.player.participant.vars['alpha_shift'] = rd.normalvariate(0, Constants.alpha_shift_sd)
 
         else:
             self.player.advance_round()
@@ -94,7 +94,7 @@ class belief_page(Page):
             fav_move = (self.player.hold == 1 and price_up) or (self.player.hold == - 1 and not price_up)
             is_interaction = self.player.hold == prev_self.hold and\
                 ((prev_self.returns > 0 and fav_move) or (prev_self.returns < 0 and not fav_move))
-            self.player.alpha_used = ((.2 + self.player.alpha_shift) - is_interaction * .08)
+            self.player.alpha_used = ((Constants.base_alpha + self.player.alpha_shift) - is_interaction * Constants.alpha_effect)
             self.player.belief_without_noise = prev_self.belief_without_noise +\
                 self.player.alpha_used * (int(price_up) - prev_self.belief_without_noise)
 

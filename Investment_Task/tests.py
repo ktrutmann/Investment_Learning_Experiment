@@ -9,8 +9,7 @@ from scipy.special import softmax
 class PlayerBot(Bot):
 
     cases = ['model']  # Either 'model' or 'random'
-    base_alpha = .2  # What is the learning rat in a "normal" situation
-    alpha_effect = .05  # How much lower is the learning rate for the affected situations?
+    # base_alpha and alpha_effect to be set in models.py
     sigma = .05 # The reporting error for the model
     softmax_sens = 1  # Sensitivity on the softmax function.
     # Extremely sensitive means it's a step function at a 50:50 belief
@@ -53,7 +52,7 @@ class PlayerBot(Bot):
         is_interaction = self.player.hold == prev_self.hold and\
             ((prev_returns > 0 and fav_move) or (prev_returns < 0 and not fav_move))
         new_belief = belief +\
-            ((self.base_alpha + self.player.alpha_shift) - is_interaction * self.alpha_effect) *\
+            ((Constants.base_alpha + self.player.alpha_shift) - is_interaction * Constants.alpha_effect) *\
             (int(price_up) - belief)
 
         self.belief_without_noise = new_belief

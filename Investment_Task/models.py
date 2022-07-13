@@ -37,6 +37,11 @@ class Constants(BaseConstants):
     # The starting portfolio
     starting_cash = 2500
 
+    # For Bot testing:
+    base_alpha = .2  # What is the learning rat in a "normal" situation
+    alpha_effect = .05 # How much should the learning rate be decreased by the interaction?
+    alpha_shift_sd = .02 # The sd of the learning rate distribution between subjects
+
 
 class mainSubsession(BaseSubsession):
     class Meta:
